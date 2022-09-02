@@ -12,7 +12,7 @@ config = context.config
 def get_url() -> str:
     user = os.getenv("POSTGRES_USER", "postgres")
     password = os.getenv("POSTGRES_PASSWORD", "")
-    server = os.getenv("POSTGRES_SERVER", "db")
+    server = os.getenv("POSTGRES_HOST", "db")
     db = os.getenv("POSTGRES_DB", "app")
     return f"postgresql://{user}:{password}@{server}/{db}"
 

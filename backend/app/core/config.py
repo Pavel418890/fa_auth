@@ -1,13 +1,21 @@
 import secrets
 from typing import Any, Optional
 
-from pydantic import BaseSettings, PostgresDsn, validator
+from pydantic import BaseSettings, EmailStr, PostgresDsn, validator
 
 
 class Settings(BaseSettings):
+    API_V1: str = "/api/v1"
+    SECRET_KEY: str
+
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
-    PASSWORD_RESET_TOKEN_EXPIRES_HOURS = 48
-    SECRET_KEY = secrets.token_urlsafe(32)
+    PASSWORD_RESET_TOKEN_EXPIRES_HOURS: int = 48
+
+    PRIMARY_SUPERUSER_EMAIL: EmailStr
+    PRIMARY_SUPERUSER_PHONE: str
+    PRIMARY_SUPERUSER_PASSWORD: str
+    PRIMARY_SUPERUSER_NAME: str
+
     POSTGRES_HOST: str
     POSTGRES_PORT: str
     POSTGRES_USER: str
@@ -24,7 +32,7 @@ class Settings(BaseSettings):
             return v
         else:
             return PostgresDsn.build(
-                scheme="postgresql",
+                scheme="postgresql+asyncpg",
                 user=values.get("POSTGRES_USER"),
                 password=values.get("POSTGRES_PASSWORD"),
                 host=values.get("POSTGRES_HOST"),

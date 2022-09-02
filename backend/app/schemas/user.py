@@ -2,6 +2,8 @@ from typing import Optional
 
 from pydantic import UUID4, BaseModel, EmailStr
 
+__all__ = ["User", "UserUpdate", "UserCreate", "UserInDB"]
+
 
 class UserBase(BaseModel):
     email: Optional[EmailStr] = None

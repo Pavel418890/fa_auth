@@ -2,6 +2,8 @@ from typing import Optional
 
 from pydantic import UUID4, BaseModel
 
+__all__ = ["Profile", "ProfileCreate", "ProfileUpdate", "ProfileInDB"]
+
 
 class ProfileBase(BaseModel):
     telegram: Optional[str] = None
@@ -13,7 +15,7 @@ class ProfileBase(BaseModel):
 
 
 class ProfileCreate(ProfileBase):
-    social_name: str
+    pass
 
 
 class ProfileUpdate(ProfileBase):
