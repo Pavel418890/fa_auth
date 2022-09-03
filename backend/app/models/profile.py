@@ -1,13 +1,13 @@
 import typing
 
-from sqlalchemy import CheckConstraint, Column, ForeignKey, Integer, String, Text
+from sqlalchemy import Column, ForeignKey, Integer, String, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
-from app.db import Base
+from app.db.base_class import Base
 
 if typing.TYPE_CHECKING:
-    from .user import User
+    from .user import User  # noqa
 
 
 class Profile(Base):
@@ -18,6 +18,6 @@ class Profile(Base):
     bio = Column(Text)
     picture = Column(String, default="default.png")
     owner_id = Column(
-        UUID(as_uuid=True), ForeignKey("user.id", ondelete="CASCADE")
+        UUID(as_uuid=True), ForeignKey("app_user.id", ondelete="CASCADE")
     )
-    owner = relationship("User", backref="profile")
+    owner = relationship("User", back_populates="profile")

@@ -12,7 +12,7 @@ ALGORITHM = "HS256"
 
 
 def create_access_token(
-    subject: Union[str, Any], expires_delta: timedelta = None
+        subject: Union[str, Any], expires_delta: timedelta = None
 ) -> str:
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -42,6 +42,17 @@ def generate_password_reset_token(email: str) -> str:
     return jwt.encode(
         claims=to_encode, key=settings.SECRET_KEY, algorithm=ALGORITHM
     )
+
+
+def verify_access_token(token: str) -> Optional[dict]:
+    try:
+        token = jwt.decode(
+            token=token, key=settings.SECRET_KEY, algorithms=ALGORITHM
+        )
+    except jwt.JWTError:
+        return None
+    else:
+        return token
 
 
 def verify_password_reset_token(token: str) -> Optional[str]:
