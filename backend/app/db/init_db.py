@@ -3,7 +3,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app import crud, schemas
 from app.core.config import settings
 from app.db import base  # noqa: F401
-from app.core.config import settings
 
 
 async def init_db(db: AsyncSession) -> None:

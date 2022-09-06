@@ -1,11 +1,11 @@
-from typing import Any
+from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud, models, schemas
-from app.api.deps import get_db
+from app.api.deps import get_current_active_user, get_current_user, get_db
 from app.core import security
 
 router = APIRouter()
@@ -33,3 +33,10 @@ async def create_access_token(
             "access_token": security.create_access_token(subject=user.id),
             "token_type": "bearer",
         }
+
+
+@router.get("/login/test-token", response_model=schemas.User)
+async def check_access_token(
+    current_user: models.User = Depends(get_current_user),
+) -> Optional[models.User]:
+    return current_user

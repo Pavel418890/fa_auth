@@ -14,7 +14,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     async def get_by_email(
         self, db: AsyncSession, *, email: str
     ) -> Optional[User]:
-        return await db.scalar(select(User).where(email == email))
+        return await db.scalar(select(User).where(User.email == email))
 
     async def create(self, db: AsyncSession, *, data: UserCreate) -> User:
         db_obj = User(
@@ -23,7 +23,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             phone=data.phone,
             hashed_password=get_password_hash(data.password),
             profile=Profile(),
-            is_superuser=data.is_superuser
+            is_superuser=data.is_superuser,
         )
         db.add(db_obj)
         await db.commit()

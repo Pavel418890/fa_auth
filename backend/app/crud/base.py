@@ -20,12 +20,16 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     async def get(
         self, db: AsyncSession, *, id: Union[int, UUID4]
     ) -> Optional[ModelType]:
-        return await db.get(ModelType, ident=id)
+        return await db.get(self.model, ident=id)
 
     async def get_list(
         self, db: AsyncSession, *, offset: int = 0, limit: int = 100
     ) -> list[ModelType]:
-        return await db.scalars(select(ModelType).offset(offset).limit(limit))
+        query = await db.execute(
+            select(self.model).offset(offset).limit(limit)
+        )
+        result = query.scalars().all()
+        return result
 
     async def create(
         self, db: AsyncSession, *, data: CreateSchemaType

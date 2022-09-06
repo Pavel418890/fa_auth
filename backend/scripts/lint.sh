@@ -2,6 +2,6 @@
 
 set -x
 
-mypy
+mypy app
 black app --check
 isort --check-only app
