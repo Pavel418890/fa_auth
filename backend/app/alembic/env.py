@@ -33,9 +33,10 @@ target_metadata = Base.metadata
 def get_url() -> str:
     user = os.getenv("POSTGRES_USER", "postgres")
     password = os.getenv("POSTGRES_PASSWORD", "")
-    server = os.getenv("POSTGRES_HOST", "db")
+    host = os.getenv("POSTGRES_HOST", "postgres")
+    port = os.getenv("POSTGRES_PORT", 5432)
     db = os.getenv("POSTGRES_DB", "app")
-    return f"postgresql+asyncpg://{user}:{password}@{server}/{db}"
+    return f"postgresql+asyncpg://{user}:{password}@{host}:{port}/{db}"
 
 
 def run_migrations_offline() -> None:

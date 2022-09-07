@@ -13,6 +13,7 @@ if typing.TYPE_CHECKING:
 class Profile(Base):
     id = Column(Integer, primary_key=True, index=True)
     social_name = Column(String, unique=True, index=True)
+    full_name = Column(String, index=True)
     location = Column(String)
     company = Column(String)
     bio = Column(Text)

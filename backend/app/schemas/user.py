@@ -8,7 +8,6 @@ __all__ = ["User", "UserUpdate", "UserCreate", "UserInDB"]
 class UserBase(BaseModel):
     email: Optional[EmailStr] = None
     phone: Optional[str] = None
-    full_name: Optional[str] = None
     is_active: Optional[bool] = True
     is_superuser: bool = False
 

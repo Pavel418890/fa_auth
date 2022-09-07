@@ -3,6 +3,7 @@ from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import ValidationError
+from pydantic.schema import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud, models, schemas
@@ -44,7 +45,7 @@ async def get_current_user(
 
 async def get_current_active_user(
     current_user: models.User = Depends(get_current_user),
-) -> models.User:
+) -> Optional[models.User]:
     if not crud.user.is_active(current_user):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Inactive user"
@@ -54,10 +55,25 @@ async def get_current_active_user(
 
 async def get_current_active_superuser(
     current_user: models.User = Depends(get_current_active_user),
-) -> models.User:
+) -> Optional[models.User]:
     if not crud.user.is_superuser(current_user):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="The user doesn't have enough privileges",
         )
     return current_user
+
+
+async def get_user_by_id(
+    *,
+    db: AsyncSession = Depends(get_db),
+    user_id: UUID,
+    current_user: models.User = Depends(get_current_active_superuser),
+) -> Optional[models.User]:
+    user_in_db = await crud.user.get(db=db, id=user_id)
+    if not user_in_db:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User with provided identifier doesn't exist",
+        )
+    return user_in_db

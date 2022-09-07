@@ -6,6 +6,7 @@ __all__ = ["Profile", "ProfileCreate", "ProfileUpdate", "ProfileInDB"]
 
 
 class ProfileBase(BaseModel):
+    full_name: Optional[str] = None
     telegram: Optional[str] = None
     bio: Optional[str] = None
     social_name: Optional[str] = None

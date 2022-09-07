@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional, Union
 from uuid import uuid4
 
 from sqlalchemy import select
@@ -21,6 +21,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             id=uuid4(),
             email=data.email,
             phone=data.phone,
+            full_name=data.full_name,
             hashed_password=get_password_hash(data.password),
             profile=Profile(),
             is_superuser=data.is_superuser,
@@ -34,19 +35,37 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         self, db: AsyncSession, *, email: str, password: str
     ) -> Optional[User]:
         try:
-            user = await self.get_by_email(db, email=email)
-            assert user
-            assert verify_password(password, user.hashed_password)
+            user_in_db = await self.get_by_email(db, email=email)
+            assert user_in_db
+            assert verify_password(password, user_in_db.hashed_password)
         except AssertionError:
             return None
         else:
-            return user
+            return user_in_db
 
-    def is_active(self, user: User) -> bool:
-        return user.is_active
+    async def update(
+        self,
+        db: AsyncSession,
+        *,
+        user_in_db: User,
+        data: Union[UserUpdate, dict[str, Any]]
+    ) -> Optional[User]:
+        if isinstance(data, dict):
+            update_data = data
+        else:
+            update_data = data.dict(exclude_unset=True)
+            if update_data.get("password", None):
+                hashed_password = get_password_hash(
+                    update_data.pop("password")
+                )
+                update_data["hashed_password"] = hashed_password
+        return await super().update(db, db_obj=user_in_db, data=update_data)
 
-    def is_superuser(self, user: User) -> bool:
-        return user.is_superuser
+    def is_active(self, user_in_db: User) -> bool:
+        return user_in_db.is_active
+
+    def is_superuser(self, user_in_db: User) -> bool:
+        return user_in_db.is_superuser
 
 
 user = CRUDUser(User)

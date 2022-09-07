@@ -18,7 +18,6 @@ class User(Base):
     )
     email = Column(String, index=True, unique=True)
     phone = Column(String, index=True, unique=True)
-    full_name = Column(String, index=True)
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean(), default=True)
     is_superuser = Column(Boolean(), default=False)
