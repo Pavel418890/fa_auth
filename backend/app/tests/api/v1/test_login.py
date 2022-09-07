@@ -22,7 +22,7 @@ async def test_get_access_token(event_loop, client: AsyncClient) -> None:
 async def test_invalid_credentials(event_loop, client: AsyncClient) -> None:
     login_data = {
         "username": random_email_address(),
-        "password": random_lower_string()
+        "password": random_lower_string(),
     }
     response = await client.post(
         f"{settings.API_V1}/login/access-token", data=login_data
@@ -33,7 +33,7 @@ async def test_invalid_credentials(event_loop, client: AsyncClient) -> None:
 
 
 async def test_use_access_token(
-        client: AsyncClient, superuser_token_headers: dict[str, str]
+    client: AsyncClient, superuser_token_headers: dict[str, str]
 ) -> None:
     response = await client.get(
         f"{settings.API_V1}/login/test-token", headers=superuser_token_headers

@@ -21,7 +21,6 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             id=uuid4(),
             email=data.email,
             phone=data.phone,
-            full_name=data.full_name,
             hashed_password=get_password_hash(data.password),
             profile=Profile(),
             is_superuser=data.is_superuser,

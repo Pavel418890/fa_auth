@@ -5,10 +5,9 @@ import pytest_asyncio
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from main import app
-
 from app.db.session import AsyncSessionLocal
 from app.tests.utils import get_superuser_token_headers
+from main import app
 
 
 @pytest_asyncio.fixture(scope="session")

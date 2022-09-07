@@ -1,32 +1,16 @@
 version: '3'
 services:
 
-  db:
-    container_name: db
+  pg:
+    container_name: pg
     image: postgres:14
     volumes:
       - pg_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=pg418890
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=fa_db
+    env_file:
+      - ./.env
     restart: always
-
-  pgbouncer:
-    container_name: pgbouncer
-    image: edoburu/pgbouncer
-    environment:
-       - DB_USER=postgres
-       - DB_PASSWORD=pg418890
-       - DB_HOST=db
-       - DB_NAME=fa_db
-       - POOL_MODE=transaction
-       - ADMIN_USERS=postgres
     ports:
-      - "5432:5432"
-    restart: always
-    depends_on:
-      - db
-
+      - 5432:5432
+    
 volumes:
   pg_data:

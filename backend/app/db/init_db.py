@@ -14,7 +14,6 @@ async def init_db(db: AsyncSession) -> None:
             email=settings.PRIMARY_SUPERUSER_EMAIL,
             phone=settings.PRIMARY_SUPERUSER_PHONE,
             password=settings.PRIMARY_SUPERUSER_PASSWORD,
-            full_name=settings.PRIMARY_SUPERUSER_NAME,
             is_superuser=True,
         )
         await crud.user.create(db, data=superuser)
