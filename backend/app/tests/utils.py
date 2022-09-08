@@ -15,6 +15,10 @@ def random_email_address() -> str:
     return f"{random_lower_string()}@{random_lower_string()}.com"
 
 
+def random_phone_string() -> str:
+    return f'+{"".join(random.choices(string.digits, k=11))}'
+
+
 async def get_superuser_token_headers(client: AsyncClient) -> dict[str, str]:
     login_data = {
         "username": settings.PRIMARY_SUPERUSER_EMAIL,

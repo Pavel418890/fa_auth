@@ -4,7 +4,6 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import UUID4, BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import Session
 
 from ..db.base import Base
 

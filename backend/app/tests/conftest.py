@@ -3,17 +3,36 @@ from typing import Generator, Iterator
 
 import pytest_asyncio
 from httpx import AsyncClient
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
+from sqlalchemy.orm import sessionmaker
 
-from app.db.session import AsyncSessionLocal
+from app.db.session import AsyncSessionLocal, async_engine
+from app.main import app
 from app.tests.utils import get_superuser_token_headers
-from main import app
 
 
 @pytest_asyncio.fixture(scope="session")
-async def db() -> AsyncSession:
-    async with AsyncSessionLocal() as session:
+async def sqla_engine() -> AsyncEngine:
+    try:
+        yield async_engine
+    finally:
+        await async_engine.dispose()
+
+
+@pytest_asyncio.fixture(scope="session")
+async def db(sqla_engine) -> AsyncSession:
+    connection = await sqla_engine.connect()
+    transaction = await connection.begin()
+    ASession = sessionmaker(
+        connection, expire_on_commit=False, class_=AsyncSession
+    )
+    session = ASession()
+    try:
         yield session
+    finally:
+        await session.close()
+        await transaction.rollback()
+        await connection.close()
 
 
 @pytest_asyncio.fixture(scope="module")

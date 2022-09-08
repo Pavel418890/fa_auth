@@ -1,11 +1,10 @@
-import pytest
 from httpx import AsyncClient
 
 from app.core.config import settings
 from app.tests.utils import random_email_address, random_lower_string
 
 
-async def test_get_access_token(event_loop, client: AsyncClient) -> None:
+async def test_get_access_token(client: AsyncClient) -> None:
     login_data = {
         "username": settings.PRIMARY_SUPERUSER_EMAIL,
         "password": settings.PRIMARY_SUPERUSER_PASSWORD,
@@ -19,7 +18,7 @@ async def test_get_access_token(event_loop, client: AsyncClient) -> None:
     assert token["access_token"]
 
 
-async def test_invalid_credentials(event_loop, client: AsyncClient) -> None:
+async def test_invalid_credentials(client: AsyncClient) -> None:
     login_data = {
         "username": random_email_address(),
         "password": random_lower_string(),

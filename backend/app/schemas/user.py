@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import UUID4, BaseModel, EmailStr
+from pydantic import UUID4, BaseModel, EmailStr, validator
 
 __all__ = ["User", "UserUpdate", "UserCreate", "UserInDB"]
 
@@ -13,8 +13,15 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    email: EmailStr
     password: str
+
+    @validator("phone")
+    def check_email_or_phone(cls, phone, values) -> str:
+        if "email" not in values and not phone:
+            raise ValueError(
+                "Either email or phone is required",
+            )
+        return phone
 
 
 class UserUpdate(UserBase):

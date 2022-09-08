@@ -1,4 +1,3 @@
-import secrets
 from typing import Any, Optional
 
 from pydantic import BaseSettings, EmailStr, PostgresDsn, validator

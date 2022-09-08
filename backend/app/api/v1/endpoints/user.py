@@ -3,7 +3,6 @@ from typing import Any, Optional
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from pydantic.networks import EmailStr
-from pydantic.schema import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud, models, schemas
