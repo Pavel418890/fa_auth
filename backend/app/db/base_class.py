@@ -8,7 +8,7 @@ from sqlalchemy.ext.declarative import as_declarative, declared_attr
 class Base:
     id: Any
     __name__: str
-    metadata: MetaData(
+    metadata = MetaData(
         naming_convention={
             "ix": "ix_%(column_0_label)s",
             "uq": "uq_%(table_name)s_%(column_0_name)s",

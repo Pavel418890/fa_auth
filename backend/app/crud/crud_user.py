@@ -1,6 +1,7 @@
 from typing import Any, Optional, Union
 from uuid import uuid4
 
+from pydantic import EmailStr
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -48,7 +49,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         *,
         user_in_db: User,
         data: Union[UserUpdate, dict[str, Any]]
-    ) -> Optional[User]:
+    ) -> User:
         if isinstance(data, dict):
             update_data = data
         else:
@@ -58,7 +59,10 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
                     update_data.pop("password")
                 )
                 update_data["hashed_password"] = hashed_password
-        return await super().update(db, db_obj=user_in_db, data=update_data)
+        updated_user = await super().update(
+            db, db_obj=user_in_db, data=update_data
+        )
+        return updated_user
 
     def is_active(self, user_in_db: User) -> bool:
         return user_in_db.is_active

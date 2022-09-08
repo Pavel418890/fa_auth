@@ -1,11 +1,8 @@
-from asyncpg.exceptions import CheckViolationError
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app import crud, models, schemas
+from app import crud, schemas
 from app.core import security
-from app.core.config import settings
 from app.tests import utils
 
 

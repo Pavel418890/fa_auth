@@ -1,3 +1,4 @@
+from ctypes import Union
 from typing import Any, Optional
 
 from fastapi import APIRouter, Body, Depends, HTTPException, status
@@ -36,7 +37,7 @@ async def list_users(
     offset: int = 0,
     limit: int = 100,
     current_user: models.User = Depends(deps.get_current_active_superuser)
-) -> Optional[list[schemas.User]]:
+) -> list[models.User]:
     users = await crud.user.get_list(db=db, offset=offset, limit=limit)
     return users
 

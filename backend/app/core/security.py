@@ -44,15 +44,15 @@ def generate_password_reset_token(email: str) -> str:
     )
 
 
-def verify_access_token(token: str) -> Optional[dict]:
+def verify_access_token(token: str) -> Optional[dict[str, Any]]:
     try:
-        token = jwt.decode(
+        token_data = jwt.decode(
             token=token, key=settings.SECRET_KEY, algorithms=ALGORITHM
         )
     except jwt.JWTError:
         return None
     else:
-        return token
+        return token_data
 
 
 def verify_password_reset_token(token: str) -> Optional[str]:

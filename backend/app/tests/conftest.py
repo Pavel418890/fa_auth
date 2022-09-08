@@ -1,5 +1,5 @@
 import asyncio
-from typing import Generator, Iterator
+from typing import AsyncGenerator, Iterator
 
 import pytest_asyncio
 from httpx import AsyncClient
@@ -20,7 +20,7 @@ async def sqla_engine() -> AsyncEngine:
 
 
 @pytest_asyncio.fixture(scope="session")
-async def db(sqla_engine) -> AsyncSession:
+async def db(sqla_engine: AsyncEngine) -> AsyncSession:
     connection = await sqla_engine.connect()
     transaction = await connection.begin()
     ASession = sessionmaker(
@@ -36,7 +36,7 @@ async def db(sqla_engine) -> AsyncSession:
 
 
 @pytest_asyncio.fixture(scope="module")
-async def client() -> Generator:
+async def client() -> AsyncGenerator:
     async with AsyncClient(app=app, base_url="http://localhost:8000") as cli:
         yield cli
 

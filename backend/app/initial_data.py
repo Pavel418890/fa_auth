@@ -8,12 +8,12 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-async def init():
+async def init() -> None:
     async with AsyncSessionLocal() as db:
         await init_db(db)
 
 
-async def main():
+async def main() -> None:
     logger.info("Creating initial data")
     await init()
     logger.info("Initial data created")
