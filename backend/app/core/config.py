@@ -10,10 +10,13 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
     PASSWORD_RESET_TOKEN_EXPIRE_HOURS: int = 48
 
-    PRIMARY_SUPERUSER_EMAIL: EmailStr
+    PRIMARY_SUPERUSER_EMAIL: EmailStr  # type: ignore
     PRIMARY_SUPERUSER_PHONE: str
     PRIMARY_SUPERUSER_PASSWORD: str
-
+    INACTIVE_USER_EMAIL: EmailStr
+    INACTIVE_USER_PASSWORD: str
+    TEST_USER_EMAIL: EmailStr = "test@user.com"  # type: ignore
+    TEST_USER_PASSWORD: str
     POSTGRES_HOST: str
     POSTGRES_PORT: str
     POSTGRES_USER: str

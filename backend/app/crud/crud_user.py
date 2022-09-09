@@ -54,11 +54,10 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             update_data = data
         else:
             update_data = data.dict(exclude_unset=True)
-            if update_data.get("password", None):
-                hashed_password = get_password_hash(
-                    update_data.pop("password")
-                )
-                update_data["hashed_password"] = hashed_password
+
+        if update_data.get("password", None):
+            hashed_password = get_password_hash(update_data.pop("password"))
+            update_data["hashed_password"] = hashed_password
         updated_user = await super().update(
             db, db_obj=user_in_db, data=update_data
         )

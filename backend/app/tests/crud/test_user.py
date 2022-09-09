@@ -3,19 +3,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud, schemas
 from app.core import security
-from app.tests import utils
+from app.tests.utils import utils
+from app.tests.utils.user import create_random_user
 
 
 async def test_create_user(db: AsyncSession) -> None:
     email = utils.random_email_address()
     password = utils.random_lower_string()
-    phone = utils.random_phone_string()
-    new_user_data = schemas.UserCreate(
-        email=email, password=password, phone=phone
-    )
+    new_user_data = schemas.UserCreate(email=email, password=password)
     new_user = await crud.user.create(db, data=new_user_data)
     assert new_user.email == email
-    assert new_user.phone == phone
     assert hasattr(new_user, "hashed_password")
     assert new_user.hashed_password != password
 
@@ -34,8 +31,10 @@ async def test_create_user_without_email(db: AsyncSession) -> None:
 async def test_authenticate_user(db: AsyncSession) -> None:
     email = utils.random_email_address()
     password = utils.random_lower_string()
-    new_user = schemas.UserCreate(email=email, password=password)
-    user = await crud.user.create(db, data=new_user)
+    new_user_data = schemas.UserCreate(
+        email=email, password=password, is_active=True
+    )
+    user = await crud.user.create(db, data=new_user_data)
     authenticated_user = await crud.user.authenticate(
         db, email=email, password=password
     )
@@ -53,10 +52,7 @@ async def test_not_authenticate_user(db: AsyncSession) -> None:
 
 
 async def test_check_if_user_is_active(db: AsyncSession) -> None:
-    email = utils.random_email_address()
-    password = utils.random_lower_string()
-    new_user_data = schemas.UserCreate(email=email, password=password)
-    new_user = await crud.user.create(db, data=new_user_data)
+    new_user = await create_random_user(db)
     assert crud.user.is_active(new_user)
 
 
@@ -81,10 +77,7 @@ async def test_check_if_user_is_superuser(db: AsyncSession) -> None:
 
 
 async def test_check_if_regular_user_not_superuser(db: AsyncSession) -> None:
-    phone = utils.random_phone_string()
-    password = utils.random_lower_string()
-    new_user_data = schemas.UserCreate(phone=phone, password=password)
-    new_user = await crud.user.create(db, data=new_user_data)
+    new_user = await create_random_user(db)
     assert not crud.user.is_superuser(new_user)
 
 

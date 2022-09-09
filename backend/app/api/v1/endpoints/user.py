@@ -12,7 +12,9 @@ from app.api import deps
 router = APIRouter()
 
 
-@router.post("/", response_model=schemas.User)
+@router.post(
+    "/", response_model=schemas.User, status_code=status.HTTP_201_CREATED
+)
 async def create_user(
     *,
     db: AsyncSession = Depends(deps.get_db),

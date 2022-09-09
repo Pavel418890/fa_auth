@@ -22,6 +22,6 @@ class User(Base):
     email = Column(String, index=True, unique=True)
     phone = Column(String, index=True, unique=True)
     hashed_password = Column(String, nullable=False)
-    is_active = Column(Boolean(), default=True)
-    is_superuser = Column(Boolean(), default=False)
+    is_active = Column(Boolean(), default=True, server_default="true")
+    is_superuser = Column(Boolean(), default=False, server_default="false")
     profile = relationship("Profile", back_populates="owner", uselist=False)

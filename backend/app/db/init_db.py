@@ -17,3 +17,16 @@ async def init_db(db: AsyncSession) -> None:
             is_superuser=True,
         )
         await crud.user.create(db, data=superuser)
+
+    inactive_user = await crud.user.get_by_email(
+        db, email=settings.INACTIVE_USER_EMAIL
+    )
+    if not inactive_user:
+        inactive_user_data = schemas.UserCreate(
+            email=settings.INACTIVE_USER_EMAIL,
+            password=settings.INACTIVE_USER_PASSWORD,
+        )
+        new_user = await crud.user.create(db, data=inactive_user_data)
+        inactive_user = await crud.user.update(
+            db, user_in_db=new_user, data={"is_active": False}
+        )

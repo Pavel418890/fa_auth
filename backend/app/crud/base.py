@@ -52,8 +52,8 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             update_data = data
         else:
             update_data = data.dict(exclude_unset=True)
-        for field in current_obj:
-            if field in update_data:
+        for field in update_data:
+            if field in current_obj:
                 setattr(db_obj, field, update_data[field])
         db.add(db_obj)
         await db.commit()

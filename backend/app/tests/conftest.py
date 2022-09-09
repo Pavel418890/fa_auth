@@ -6,9 +6,10 @@ from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
+from app.core.config import settings
 from app.db.session import AsyncSessionLocal, async_engine
 from app.main import app
-from app.tests.utils import get_superuser_token_headers
+from app.tests.utils import utils
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -51,4 +52,17 @@ def event_loop() -> Iterator[asyncio.events.AbstractEventLoop]:
 
 @pytest_asyncio.fixture(scope="module")
 async def superuser_token_headers(client: AsyncClient) -> dict[str, str]:
-    return await get_superuser_token_headers(client)
+    return await utils.get_token_headers(
+        client=client,
+        username=settings.PRIMARY_SUPERUSER_EMAIL,
+        password=settings.PRIMARY_SUPERUSER_PASSWORD,
+    )
+
+
+@pytest_asyncio.fixture(scope="module")
+async def regular_user_token_headers(client: AsyncClient) -> dict[str, str]:
+    return await utils.get_token_headers(
+        client=client,
+        username=settings.TEST_USER_EMAIL,
+        password=settings.TEST_USER_PASSWORD,
+    )
