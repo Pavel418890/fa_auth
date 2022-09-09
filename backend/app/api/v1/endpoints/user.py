@@ -84,7 +84,7 @@ async def get_user_by_id(
     return existing_user
 
 
-@router.put("{user_id}", response_model=schemas.User)
+@router.put("/{user_id}", response_model=schemas.User)
 async def update_user_by_id(
     *,
     db: AsyncSession = Depends(deps.get_db),

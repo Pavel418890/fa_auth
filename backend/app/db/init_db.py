@@ -30,3 +30,13 @@ async def init_db(db: AsyncSession) -> None:
         inactive_user = await crud.user.update(
             db, user_in_db=new_user, data={"is_active": False}
         )
+
+    test_user = await crud.user.get_by_email(
+        db, email=settings.TEST_USER_EMAIL
+    )
+    if not test_user:
+        test_user_data = schemas.UserCreate(
+            email=settings.TEST_USER_EMAIL,
+            password=settings.TEST_USER_PASSWORD,
+        )
+        await crud.user.create(db, data=test_user_data)
