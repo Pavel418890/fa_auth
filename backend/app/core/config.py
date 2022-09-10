@@ -40,6 +40,8 @@ class Settings(BaseSettings):
                 port=values.get("POSTGRES_PORT"),
                 path=f'/{values.get("POSTGRES_DB", "")}',
             )
+    GITHUB_CLIENT_ID: str
+    GITHUB_SECRET_KEY: str
 
     class Config:
         case_sensitive = True

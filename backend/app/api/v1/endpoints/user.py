@@ -94,3 +94,4 @@ async def update_user_by_id(
     return await crud.user.update(
         db, user_in_db=existing_user, data=new_user_data
     )
+
