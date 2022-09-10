@@ -45,8 +45,9 @@ async def check_access_token(
     return current_user
 
 
-@router.get("/")
+@router.get("/oauth2github")
 async def login_oauth(request: Request):
+    
     return RedirectResponse(
         "https://github.com/login/oauth/authorize?client_id={}&redirect_uri={}".format(
             settings.GITHUB_CLIENT_ID,
@@ -54,6 +55,18 @@ async def login_oauth(request: Request):
         )
     )
 
+
+@router.get("/oauth2google")
+async def oauth_google():
+    return RedirectResponse(
+        f"https://accounts.google.com/o/oauth2/v2/auth?"
+        f"scope=https%3A//www.googleapis.com/auth/cloud-platform.read-only&"
+        f"access_type=offline&"
+        f"include_granted_scopes=true&"
+        f"response_type=code&"
+        f"redirect_uri=http%3A//localhost:8000/api/v1/auth/google-login&"
+        f"client_id={settings.GOOGLE_CLIENT_ID}"
+    )
 
 @router.get("/github-login")
 async def authorize(request: Request):
@@ -76,3 +89,9 @@ async def authorize(request: Request):
         r = res.text
         return r
 
+@router.get("/google-login")
+async def authorize_google(request: Request):
+    async with AsyncClient() as session:
+        response = await session.post(
+            "https://"
+        )

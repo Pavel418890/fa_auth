@@ -15,7 +15,6 @@ oauth2_token = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1}/login/access-token"
 )
 
-
 async def get_db() -> AsyncSession:
     async with AsyncSessionLocal() as db:
         yield db

@@ -42,6 +42,8 @@ class Settings(BaseSettings):
             )
     GITHUB_CLIENT_ID: str
     GITHUB_SECRET_KEY: str
+    GOOGLE_CLIENT_ID: str
+    GOOGLE_SECRET_KEY: str
 
     class Config:
         case_sensitive = True
