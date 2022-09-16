@@ -47,12 +47,11 @@ async def check_access_token(
 
 @router.get("/oauth2github")
 async def login_oauth(request: Request):
-    
+    state = request.session
     return RedirectResponse(
-        "https://github.com/login/oauth/authorize?client_id={}&redirect_uri={}".format(
-            settings.GITHUB_CLIENT_ID,
-            "http://localhost:8000/api/v1/auth/github-login"
-        )
+        "https://github.com/login/oauth/authorize?"
+        f"client_id={settings.GITHUB_CLIENT_ID}&"
+        f"redirect_uri={'http://localhost:8000/api/v1/auth/github-login'}"
     )
 
 
@@ -60,7 +59,7 @@ async def login_oauth(request: Request):
 async def oauth_google():
     return RedirectResponse(
         f"https://accounts.google.com/o/oauth2/v2/auth?"
-        f"scope=https%3A//www.googleapis.com/auth/cloud-platform.read-only&"
+        f"scope=https%3A//www.googleapis.com/auth/userinfo.email.read-only&"
         f"access_type=offline&"
         f"include_granted_scopes=true&"
         f"response_type=code&"

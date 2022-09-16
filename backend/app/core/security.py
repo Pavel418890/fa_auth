@@ -3,6 +3,7 @@ from typing import Any, Optional, Union
 
 from jose import jwt
 from passlib.context import CryptContext
+from authlib.integrations.starlette_client import OAuth
 
 from app.core.config import settings
 
@@ -63,3 +64,19 @@ def verify_password_reset_token(token: str) -> Optional[str]:
         return decoded_jwt["email"]
     except jwt.JWTError:
         return None
+
+oauth2_github =  OAuth()
+oauth2_google = OAuth()
+
+oauth2_github.register(
+    name="github",
+    client_id=settings.GITHUB_CLIENT_ID,
+    client_secret=settings.GITHUB_SECRET_KEY,
+    access_token_url='https://github.com/login/oauth/access_token',
+    access_token_params=None,
+    authorize_url='https://github.com/login/oauth/authorize',
+    authorize_params=None,
+    api_base_url='https://api.github.com/',
+    client_kwargs={'scope': 'user:email'},
+
+)

@@ -1,9 +1,6 @@
-from httpx import AsyncClient
-from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud, models, schemas
-from app.core.config import settings
 from app.tests.utils import utils
 
 

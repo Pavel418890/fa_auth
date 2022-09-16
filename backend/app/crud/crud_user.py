@@ -39,7 +39,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             assert user_in_db
             assert verify_password(password, user_in_db.hashed_password)
         except AssertionError:
-            return None
+                    return None
         else:
             return user_in_db
 
