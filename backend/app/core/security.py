@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 from typing import Any, Optional, Union
 
+from fastapi import Request
 from jose import jwt
 from passlib.context import CryptContext
-from authlib.integrations.starlette_client import OAuth
 
 from app.core.config import settings
 
@@ -22,9 +22,7 @@ def create_access_token(
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
     to_encode = {"exp": expire, "sub": str(subject)}
-    return jwt.encode(
-        claims=to_encode, key=settings.SECRET_KEY, algorithm=ALGORITHM
-    )
+    return jwt.encode(claims=to_encode, key=settings.SECRET_KEY, algorithm=ALGORITHM)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -40,9 +38,7 @@ def generate_password_reset_token(email: str) -> str:
         hours=settings.PASSWORD_RESET_TOKEN_EXPIRE_HOURS
     )
     to_encode = {"sub": email, "nbf": datetime.utcnow(), "exp": expires}
-    return jwt.encode(
-        claims=to_encode, key=settings.SECRET_KEY, algorithm=ALGORITHM
-    )
+    return jwt.encode(claims=to_encode, key=settings.SECRET_KEY, algorithm=ALGORITHM)
 
 
 def verify_access_token(token: str) -> Optional[dict[str, Any]]:
@@ -64,19 +60,3 @@ def verify_password_reset_token(token: str) -> Optional[str]:
         return decoded_jwt["email"]
     except jwt.JWTError:
         return None
-
-oauth2_github =  OAuth()
-oauth2_google = OAuth()
-
-oauth2_github.register(
-    name="github",
-    client_id=settings.GITHUB_CLIENT_ID,
-    client_secret=settings.GITHUB_SECRET_KEY,
-    access_token_url='https://github.com/login/oauth/access_token',
-    access_token_params=None,
-    authorize_url='https://github.com/login/oauth/authorize',
-    authorize_params=None,
-    api_base_url='https://api.github.com/',
-    client_kwargs={'scope': 'user:email'},
-
-)

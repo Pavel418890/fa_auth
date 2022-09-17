@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
     PASSWORD_RESET_TOKEN_EXPIRE_HOURS: int = 48
 
-    PRIMARY_SUPERUSER_EMAIL: EmailStr  # type: ignore
+    PRIMARY_SUPERUSER_EMAIL: EmailStr
     PRIMARY_SUPERUSER_PHONE: str
     PRIMARY_SUPERUSER_PASSWORD: str
     INACTIVE_USER_EMAIL: EmailStr
@@ -41,6 +41,7 @@ class Settings(BaseSettings):
                 port=values.get("POSTGRES_PORT"),
                 path=f'/{values.get("POSTGRES_DB", "")}',
             )
+
     GITHUB_CLIENT_ID: str
     GITHUB_SECRET_KEY: str
     GITHUB_REDIRECT_URI = f"{CLIENT_BASE_URL}{API_V1}/oauth2github"
@@ -54,6 +55,7 @@ class Settings(BaseSettings):
     GOOGLE_AUTHORIZATION_URL = "https://accounts.google.com/o/oauth2/v2/auth"
     GOOGLE_ACCESS_TOKEN_URL = "https://oauth2.googleapis.com/token"
     GOOGLE_API_ENDPOINT = "https://www.googleapis.com/auth/userinfo.email"
+
     class Config:
         case_sensitive = True
 

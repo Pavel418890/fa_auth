@@ -12,9 +12,7 @@ from app.schemas.user import UserCreate, UserUpdate
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
-    async def get_by_email(
-        self, db: AsyncSession, *, email: str
-    ) -> Optional[User]:
+    async def get_by_email(self, db: AsyncSession, *, email: str) -> Optional[User]:
         return await db.scalar(select(User).where(User.email == email))
 
     async def create(self, db: AsyncSession, *, data: UserCreate) -> User:
@@ -39,7 +37,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             assert user_in_db
             assert verify_password(password, user_in_db.hashed_password)
         except AssertionError:
-                    return None
+            return None
         else:
             return user_in_db
 
@@ -58,9 +56,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         if update_data.get("password", None):
             hashed_password = get_password_hash(update_data.pop("password"))
             update_data["hashed_password"] = hashed_password
-        updated_user = await super().update(
-            db, db_obj=user_in_db, data=update_data
-        )
+        updated_user = await super().update(db, db_obj=user_in_db, data=update_data)
         return updated_user
 
     def is_active(self, user_in_db: User) -> bool:

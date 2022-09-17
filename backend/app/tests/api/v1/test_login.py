@@ -11,9 +11,7 @@ async def test_get_access_token(client: AsyncClient) -> None:
         "username": settings.PRIMARY_SUPERUSER_EMAIL,
         "password": settings.PRIMARY_SUPERUSER_PASSWORD,
     }
-    r = await client.post(
-        f"{settings.API_V1}/login/access-token", data=login_data
-    )
+    r = await client.post(f"{settings.API_V1}/login/access-token", data=login_data)
     token = r.json()
     assert r.status_code == 200
     assert token["token_type"] == "bearer"

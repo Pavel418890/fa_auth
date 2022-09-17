@@ -12,9 +12,7 @@ from app.api import deps
 router = APIRouter()
 
 
-@router.post(
-    "/", response_model=schemas.User, status_code=status.HTTP_201_CREATED
-)
+@router.post("/", response_model=schemas.User, status_code=status.HTTP_201_CREATED)
 async def create_user(
     *,
     db: AsyncSession = Depends(deps.get_db),
@@ -70,9 +68,7 @@ async def update_me(
         update_data.password = password
     if phone is not None:
         update_data.phone = phone
-    return await crud.user.update(
-        db, user_in_db=current_user, data=update_data
-    )
+    return await crud.user.update(db, user_in_db=current_user, data=update_data)
 
 
 @router.get("/{user_id}", response_model=schemas.User)
@@ -91,7 +87,4 @@ async def update_user_by_id(
     new_user_data: schemas.UserUpdate,
     existing_user: models.User = Depends(deps.get_user_by_id)
 ) -> Any:
-    return await crud.user.update(
-        db, user_in_db=existing_user, data=new_user_data
-    )
-
+    return await crud.user.update(db, user_in_db=existing_user, data=new_user_data)

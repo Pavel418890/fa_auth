@@ -18,7 +18,5 @@ class Profile(Base):
     company = Column(String)
     bio = Column(Text)
     picture = Column(String, default="default.png")
-    owner_id = Column(
-        UUID(as_uuid=True), ForeignKey("app_user.id", ondelete="CASCADE")
-    )
+    owner_id = Column(UUID(as_uuid=True), ForeignKey("app_user.id", ondelete="CASCADE"))
     owner = relationship("User", back_populates="profile")

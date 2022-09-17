@@ -131,14 +131,8 @@ async def test_update_me(
     updated_user = response.json()
 
     assert response.status_code == 200
-    assert (
-        updated_user["email"] == new_email
-        and updated_user["email"] != current_email
-    )
-    assert (
-        updated_user["phone"] == new_phone
-        and updated_user["phone"] != current_phone
-    )
+    assert updated_user["email"] == new_email and updated_user["email"] != current_email
+    assert updated_user["phone"] == new_phone and updated_user["phone"] != current_phone
 
 
 async def test_get_user_by_id(
@@ -146,9 +140,7 @@ async def test_get_user_by_id(
     db: AsyncSession,
     superuser_token_headers: dict[str, str],
 ) -> None:
-    some_user = await crud.user.get_by_email(
-        db, email=settings.TEST_USER_EMAIL
-    )
+    some_user = await crud.user.get_by_email(db, email=settings.TEST_USER_EMAIL)
     response = await client.get(
         f"{settings.API_V1}/users/{some_user.id}",
         headers=superuser_token_headers,

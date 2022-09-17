@@ -24,9 +24,7 @@ async def sqla_engine() -> AsyncEngine:
 async def db(sqla_engine: AsyncEngine) -> AsyncSession:
     connection = await sqla_engine.connect()
     transaction = await connection.begin()
-    ASession = sessionmaker(
-        connection, expire_on_commit=False, class_=AsyncSession
-    )
+    ASession = sessionmaker(connection, expire_on_commit=False, class_=AsyncSession)
     session = ASession()
     try:
         yield session

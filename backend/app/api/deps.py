@@ -11,9 +11,8 @@ from app.core import security
 from app.core.config import settings
 from app.db.session import AsyncSessionLocal
 
-oauth2_token = OAuth2PasswordBearer(
-    tokenUrl=f"{settings.API_V1}/login/access-token"
-)
+oauth2_token = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1}/login/access-token")
+
 
 async def get_db() -> AsyncSession:
     async with AsyncSessionLocal() as db:

@@ -1,6 +1,6 @@
 from typing import Any, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from httpx import AsyncClient
@@ -16,8 +16,8 @@ router = APIRouter()
 
 @router.post("/login/access-token", response_model=schemas.Token)
 async def create_access_token(
-        db: AsyncSession = Depends(get_db),
-        form_data: OAuth2PasswordRequestForm = Depends(),
+    db: AsyncSession = Depends(get_db),
+    form_data: OAuth2PasswordRequestForm = Depends(),
 ) -> Any:
     user = await crud.user.authenticate(
         db, email=form_data.username, password=form_data.password
@@ -40,7 +40,7 @@ async def create_access_token(
 
 @router.get("/login/test-token", response_model=schemas.User)
 async def check_access_token(
-        current_user: models.User = Depends(get_current_user),
+    current_user: models.User = Depends(get_current_user),
 ) -> Optional[models.User]:
     return current_user
 
@@ -67,6 +67,7 @@ async def oauth_google():
         f"client_id={settings.GOOGLE_CLIENT_ID}"
     )
 
+
 @router.get("/github-login")
 async def authorize(request: Request):
     async with AsyncClient() as session:
@@ -75,22 +76,21 @@ async def authorize(request: Request):
             data={
                 "client_id": settings.GITHUB_CLIENT_ID,
                 "client_secret": settings.GITHUB_SECRET_KEY,
-                "code": request.query_params["code"]
-            }
+                "code": request.query_params["code"],
+            },
         )
         result = response.text
         token = result.split("&")
         access_token = token[0].split("=")[1]
         res = await session.get(
             "https://api.github.com/user",
-            headers={"Authorization": f"Bearer {access_token}"}
+            headers={"Authorization": f"Bearer {access_token}"},
         )
         r = res.text
         return r
 
+
 @router.get("/google-login")
 async def authorize_google(request: Request):
     async with AsyncClient() as session:
-        response = await session.post(
-            "https://"
-        )
+        response = await session.post("https://")

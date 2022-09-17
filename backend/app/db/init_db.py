@@ -6,9 +6,7 @@ from app.db import base  # noqa: F401
 
 
 async def init_db(db: AsyncSession) -> None:
-    user = await crud.user.get_by_email(
-        db, email=settings.PRIMARY_SUPERUSER_EMAIL
-    )
+    user = await crud.user.get_by_email(db, email=settings.PRIMARY_SUPERUSER_EMAIL)
     if not user:
         superuser = schemas.UserCreate(
             email=settings.PRIMARY_SUPERUSER_EMAIL,
@@ -18,9 +16,7 @@ async def init_db(db: AsyncSession) -> None:
         )
         await crud.user.create(db, data=superuser)
 
-    inactive_user = await crud.user.get_by_email(
-        db, email=settings.INACTIVE_USER_EMAIL
-    )
+    inactive_user = await crud.user.get_by_email(db, email=settings.INACTIVE_USER_EMAIL)
     if not inactive_user:
         inactive_user_data = schemas.UserCreate(
             email=settings.INACTIVE_USER_EMAIL,
@@ -31,9 +27,7 @@ async def init_db(db: AsyncSession) -> None:
             db, user_in_db=new_user, data={"is_active": False}
         )
 
-    test_user = await crud.user.get_by_email(
-        db, email=settings.TEST_USER_EMAIL
-    )
+    test_user = await crud.user.get_by_email(db, email=settings.TEST_USER_EMAIL)
     if not test_user:
         test_user_data = schemas.UserCreate(
             email=settings.TEST_USER_EMAIL,

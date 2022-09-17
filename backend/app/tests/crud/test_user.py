@@ -31,9 +31,7 @@ async def test_create_user_without_email(db: AsyncSession) -> None:
 async def test_authenticate_user(db: AsyncSession) -> None:
     email = utils.random_email_address()
     password = utils.random_lower_string()
-    new_user_data = schemas.UserCreate(
-        email=email, password=password, is_active=True
-    )
+    new_user_data = schemas.UserCreate(email=email, password=password, is_active=True)
     user = await crud.user.create(db, data=new_user_data)
     authenticated_user = await crud.user.authenticate(
         db, email=email, password=password
@@ -59,9 +57,7 @@ async def test_check_if_user_is_active(db: AsyncSession) -> None:
 async def test_check_if_user_is_active_inactive(db: AsyncSession) -> None:
     email = utils.random_email_address()
     password = utils.random_lower_string()
-    new_user_data = schemas.UserCreate(
-        email=email, password=password, is_active=False
-    )
+    new_user_data = schemas.UserCreate(email=email, password=password, is_active=False)
     new_user = await crud.user.create(db, data=new_user_data)
     assert crud.user.is_active(new_user)
 
@@ -98,9 +94,7 @@ async def test_update_user(db: AsyncSession) -> None:
     new_user_data = schemas.UserCreate(
         email=email, password=password, is_superuser=True
     )
-    updated_user_data = schemas.UserUpdate(
-        password=new_password, is_superuser=True
-    )
+    updated_user_data = schemas.UserUpdate(password=new_password, is_superuser=True)
     new_user = await crud.user.create(db, data=new_user_data)
     await crud.user.update(db, user_in_db=new_user, data=updated_user_data)
     updated_user = await crud.user.get(db, id=new_user.id)

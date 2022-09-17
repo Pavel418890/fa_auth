@@ -13,12 +13,8 @@ if typing.TYPE_CHECKING:
 
 class User(Base):
     __tablename__ = "app_user"
-    __table_args__ = (
-        CheckConstraint("email IS NOT NULL OR phone IS NOT NULL"),
-    )
-    id = Column(
-        UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4
-    )
+    __table_args__ = (CheckConstraint("email IS NOT NULL OR phone IS NOT NULL"),)
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
     email = Column(String, index=True, unique=True)
     phone = Column(String, index=True, unique=True)
     hashed_password = Column(String, nullable=False)

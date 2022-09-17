@@ -24,15 +24,11 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     async def get_list(
         self, db: AsyncSession, *, offset: int = 0, limit: int = 100
     ) -> list[ModelType]:
-        query = await db.execute(
-            select(self.model).offset(offset).limit(limit)
-        )
+        query = await db.execute(select(self.model).offset(offset).limit(limit))
         result = query.scalars().all()
         return result
 
-    async def create(
-        self, db: AsyncSession, *, data: CreateSchemaType
-    ) -> ModelType:
+    async def create(self, db: AsyncSession, *, data: CreateSchemaType) -> ModelType:
         received_data = jsonable_encoder(data)
         db_obj = self.model(**received_data)
         db.add(db_obj)
@@ -60,9 +56,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         await db.refresh(db_obj)
         return db_obj
 
-    async def remove(
-        self, db: AsyncSession, *, id: Union[int, UUID4]
-    ) -> ModelType:
+    async def remove(self, db: AsyncSession, *, id: Union[int, UUID4]) -> ModelType:
         db_obj = db.query(self.model).get(id)
         await db.delete(db_obj)
         await db.commit()
