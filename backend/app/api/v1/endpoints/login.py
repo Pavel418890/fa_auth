@@ -51,7 +51,7 @@ async def login_oauth(request: Request):
     return RedirectResponse(
         "https://github.com/login/oauth/authorize?"
         f"client_id={settings.GITHUB_CLIENT_ID}&"
-        f"redirect_uri={'http://localhost:8000/api/v1/auth/github-login'}"
+        f"redirect_uri={'http://localhost:8000/api/v1/github-login'}"
     )
 
 
@@ -63,7 +63,7 @@ async def oauth_google():
         f"access_type=offline&"
         f"include_granted_scopes=true&"
         f"response_type=code&"
-        f"redirect_uri=http%3A//localhost:8000/api/v1/auth/google-login&"
+        f"redirect_uri=http%3A//localhost:8000/api/v1/google-login&"
         f"client_id={settings.GOOGLE_CLIENT_ID}"
     )
 
@@ -81,10 +81,14 @@ async def authorize(request: Request):
         )
         result = response.text
         token = result.split("&")
-        access_token = token[0].split("=")[1]
+        token_result = {}
+        for elem in token:
+            key, value = elem.split("=")
+            token_result[key] = value
+        request.session['token'] = token_result
         res = await session.get(
             "https://api.github.com/user",
-            headers={"Authorization": f"Bearer {access_token}"},
+            headers={"Authorization": f"Bearer {token['access_token']}"},
         )
         r = res.text
         return r

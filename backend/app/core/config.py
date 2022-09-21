@@ -43,18 +43,18 @@ class Settings(BaseSettings):
             )
 
     GITHUB_CLIENT_ID: str
-    GITHUB_SECRET_KEY: str
+    GITHUB_CLIENT_SECRET: str
     GITHUB_REDIRECT_URI = f"{CLIENT_BASE_URL}{API_V1}/oauth2github"
     GITHUB_AUTHORIZATION_URL = "https://github.com/login/oauth/authorize"
     GITHUB_ACCESS_TOKEN_URL = "https://github.com/login/oauth/access_token"
-    GITHUB_API_ENDPOINT = "https://api.github.com/user"
+    GITHUB_API_BASE_URL = "https://api.github.com"
 
     GOOGLE_CLIENT_ID: str
-    GOOGLE_SECRET_KEY: str
+    GOOGLE_CLIENT_SECRET: str
     GOOGLE_REDIRECT_URI = f"{CLIENT_BASE_URL}{API_V1}/oauth2google"
     GOOGLE_AUTHORIZATION_URL = "https://accounts.google.com/o/oauth2/v2/auth"
     GOOGLE_ACCESS_TOKEN_URL = "https://oauth2.googleapis.com/token"
-    GOOGLE_API_ENDPOINT = "https://www.googleapis.com/auth/userinfo.email"
+    GOOGLE_API_BASE_URL = "https://www.googleapis.com/auth"    # userinfo.email
 
     class Config:
         case_sensitive = True

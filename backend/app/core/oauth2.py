@@ -1,34 +1,57 @@
-from typing import Any, Mapping, Optional
+from typing import Any, Mapping, Optional, Union
 
 from pydantic import BaseSettings
 
+OAUTH_CLIENT_PARAMS = (
+    "client_id",
+    "client_secret",
+    "redirect_uri",
+    "authorization_url",
+    "access_token_url",
+    "api_base_url",
+)
+
 
 class OAuth2:
-    def __init__(self):
+    def __init__(self, config: Any):
         self._registry = {}
         self._clients = {}
+        self.config = config
 
-    async def create_client(self, name: str):
-        pass
+    def create_client(self, name: str):
+        if name in self._clients:
+            return self._clients[name]
 
-    async def register(self):
-        pass
-
-
-class AppIntegration:
-    def __init__(self, name: str, cache=None):
-        self.name = name
-        self.cache = cache
-
-    @staticmethod
-    def load_config(
-        oauth: OAuth2, name: str, params: dict[str, int | str | Any]
-    ) -> dict[Optional[str], int | str | Any]:
-        result = {}
-        for key in params:
+        if name not in self._registry:
+            return None
+        config = {}
+        for key in OAUTH_CLIENT_PARAMS:
             conf_key = f"{name}_{key}".upper()
-            conf_value = oauth.config.get(conf_key, default=None)
-            if conf_value is not None:
-                result[key] = conf_value
+            conf_value = self.config.get(conf_key, default=None)
+            if conf_value:
+                config[key] = conf_value
+        client = OAuth2Client(**config)
+        self._clients[name] = client
+        return client
 
-        return result
+    def register(self, name: str, **kwargs):
+        self._registry[name] = kwargs
+        return self.create_client(name)
+
+
+class OAuth2Client:
+    def __init__(
+        self,
+        client_id: str,
+        client_secret: str,
+        redirect_uri: str,
+        authorization_url: str,
+        access_token_url: str,
+        api_base_url: str,
+    ):
+        self.client_id = (client_id,)
+        self.client_secret = (client_secret,)
+        self.redirect_uri = redirect_uri
+        self.authorization_url = authorization_url
+        self.access_token_url = (access_token_url,)
+        self.api_base_url = api_base_url
