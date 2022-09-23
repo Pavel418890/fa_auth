@@ -1,6 +1,7 @@
 from typing import Any, Mapping, Optional, Union
 
 from pydantic import BaseSettings
+from httpx import AsyncClient
 
 OAUTH_CLIENT_PARAMS = (
     "client_id",
@@ -39,7 +40,13 @@ class OAuth2:
         return self.create_client(name)
 
 
-class OAuth2Client:
+class OAuth2Client(AsyncClient):
+    SESSION_CLIENT_PARAMS = [
+    'headers', 'cookies', 'verify', 'cert', 'http1', 'http2',
+    'proxies', 'timeout', 'follow_redirects', 'limits', 'max_redirects',
+    'event_hooks', 'base_url', 'transport', 'app', 'trust_env',
+    ]
+
     def __init__(
         self,
         client_id: str,
@@ -48,6 +55,7 @@ class OAuth2Client:
         authorization_url: str,
         access_token_url: str,
         api_base_url: str,
+        **kwargs: Any
     ):
         self.client_id = (client_id,)
         self.client_secret = (client_secret,)
@@ -55,3 +63,11 @@ class OAuth2Client:
         self.authorization_url = authorization_url
         self.access_token_url = (access_token_url,)
         self.api_base_url = api_base_url
+        client_kwargs = self._extract_session_client_params(kwargs)
+        super().__init__(**client_kwargs)
+
+    def _extract_session_client_params(self, params: dict[str, Any]):
+        result = {}
+        for k in self.SESSION_CLIENT_PARAMS:
+            result[k] = params.get(k, default=None)
+        return result
