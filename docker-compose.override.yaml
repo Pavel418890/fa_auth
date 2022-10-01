@@ -1,0 +1,12 @@
+version: "3"
+services:
+  pg:
+    ports:
+      - 5432:5432
+  backend:
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/home/app/src
+    command:
+      - "scripts/start.sh"

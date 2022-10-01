@@ -33,9 +33,9 @@ target_metadata = Base.metadata
 def get_url() -> str:
     user = os.getenv("POSTGRES_USER", "postgres")
     password = os.getenv("POSTGRES_PASSWORD", "")
-    host = os.getenv("POSTGRES_HOST", "postgres")
+    host = os.getenv("POSTGRES_HOST", "localhost")
     port = os.getenv("POSTGRES_PORT", 5432)
-    db = os.getenv("POSTGRES_DB", "app")
+    db = os.getenv("POSTGRES_DB", "")
     return f"postgresql+asyncpg://{user}:{password}@{host}:{port}/{db}"
 
 
