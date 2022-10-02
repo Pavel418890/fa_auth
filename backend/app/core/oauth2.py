@@ -1,7 +1,9 @@
 from typing import Any, Mapping, Optional, Union
 
-from pydantic import BaseSettings
+from urllib.parse
 from httpx import AsyncClient
+from pydantic import BaseSettings
+from starlette.responses import RedirectResponse
 
 OAUTH_CLIENT_PARAMS = (
     "client_id",
@@ -57,11 +59,11 @@ class OAuth2Client(AsyncClient):
         api_base_url: str,
         **kwargs: Any
     ):
-        self.client_id = (client_id,)
-        self.client_secret = (client_secret,)
+        self.client_id = client_id
+        self.client_secret = client_secret
         self.redirect_uri = redirect_uri
         self.authorization_url = authorization_url
-        self.access_token_url = (access_token_url,)
+        self.access_token_url = access_token_url
         self.api_base_url = api_base_url
         client_kwargs = self._extract_session_client_params(kwargs)
         super().__init__(**client_kwargs)
@@ -72,4 +74,12 @@ class OAuth2Client(AsyncClient):
             result[k] = params.get(k, default=None)
         return result
 
-    async   
+    async def create_authorization_url(self, redirect_uri, state) -> dict:
+        pass
+
+    async def authorize_redirect(self, redirect_uri: str) ->  RedirectResponse:
+        url = await self.create_authorization_url()
+        return RedirectResponse(url, status_code=302)
+
+
+

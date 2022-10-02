@@ -54,7 +54,7 @@ class Settings(BaseSettings):
     GOOGLE_REDIRECT_URI = f"{CLIENT_BASE_URL}{API_V1}/oauth2google"
     GOOGLE_AUTHORIZATION_URL = "https://accounts.google.com/o/oauth2/v2/auth"
     GOOGLE_ACCESS_TOKEN_URL = "https://oauth2.googleapis.com/token"
-    GOOGLE_API_BASE_URL = "https://www.googleapis.com/auth"    # userinfo.email
+    GOOGLE_API_BASE_URL = "https://www.googleapis.com/auth"  # userinfo.email
 
     class Config:
         case_sensitive = True
